@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "lib": ["ES2023"],
+    "module": "ESNext",
+    "target": "ES2023",
+    "declaration": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+		"isolatedModules": true,
+    "moduleResolution": "bundler",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": false,
+    "strict": true,
+		"verbatimModuleSyntax": true,
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}
