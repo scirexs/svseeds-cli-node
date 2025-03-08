@@ -24,8 +24,8 @@ const defaultPath = path.join("src", "lib", ui.dir);
 
 program
   .version(pkg.version)
-  .argument("[components...]", "Component names to copy/remove")
-  .option("-d, --dir <directory>", "Directory path to copy/remove components", defaultPath)
+  .argument("[components...]", "Target component names")
+  .option("-d, --dir <directory>", "Directory path of components", defaultPath)
   .option("-a, --all", "Copy all components", false)
   .option("-u, --update", "Update mode", false)
   .option("-r, --remove", "Remove mode", false)
@@ -53,8 +53,9 @@ export async function main() {
     const src = await downloadProcess(tmp);
     const avails = getAvailables(src);
     const locals = opts.copy ? [] : getLocalExistingFiles(dest, avails);
+    filterAvailables(avails, locals);
 
-    const files = opts.uninstall ? [] : await getSelected(opts.components, opts.all, opts.confirm, opts.remove, avails);
+    const files = opts.uninstall ? [] : await getSelected(opts.components, opts.all, opts.confirm, avails);
     if (!opts.uninstall && files.length <= 0) throw new Error("no components specified");
 
     if (opts.update) {
@@ -151,14 +152,21 @@ function getNoPrefixName(file: string): string {
   return file.replace(ui.ext, "").replace(ui.prefix, "");
 }
 
-async function getSelected(components: string[], all: boolean, confirm: boolean, remove: boolean, avails: NameFileSet): Promise<string[]> {
+function filterAvailables(avails: NameFileSet, locals: string[]) {
+  if (locals.length <= 0) return;
+  for (const [name, file] of avails.entries()) {
+    if (!locals.includes(file)) avails.delete(name);
+  }
+}
+
+async function getSelected(components: string[], all: boolean, confirm: boolean, avails: NameFileSet): Promise<string[]> {
   if (all) {
     return [...new Set([...avails.values()])];
   } else if (components.length > 0) {
     return recognizeValidNames(components, avails).map(name => avails.get(name) ?? "");
   } else {
     if (!confirm) return [];
-    return await selectComponentsProcess(avails, remove);
+    return await selectComponentsProcess(avails);
   }
 }
 function recognizeValidNames(names: string[], avails: NameFileSet): string[] {
@@ -169,8 +177,8 @@ function recognizeValidNames(names: string[], avails: NameFileSet): string[] {
 
   return [...new Set(valid.true)];
 }
-async function selectComponentsProcess(avails: NameFileSet, remove: boolean): Promise<string[]> {
-  const message = `Select components to ${remove ? "remove" : "copy"}.`;
+async function selectComponentsProcess(avails: NameFileSet): Promise<string[]> {
+  const message = `Select components.`;
   const opts = [...avails.entries()]
     .filter(([name, _]) => !name.startsWith(ui.prefix))
     .map(([name, file]) => ({ value: file, label: name }));
