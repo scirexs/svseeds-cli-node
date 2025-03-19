@@ -1,6 +1,7 @@
 .devcontainer/
 .vscode/
 .svelte-kit/
+.github/
 node_modules/
 tests/
 .github/

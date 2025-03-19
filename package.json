@@ -1,6 +1,6 @@
 {
 	"name": "svseeds",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "A CLI to copy SvSeeds components.",
 	"type": "module",
 	"exports": "./index.js",

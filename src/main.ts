@@ -17,8 +17,8 @@ const ui = {
   tmp: "tmp_svseeds_",
   ext: ".svelte",
   prefix: "_",
-  core: "__core.ts",
-  style: "__style.ts",
+  core: "_core.ts",
+  style: "_style.ts",
 };
 const defaultPath = path.join("src", "lib", ui.dir);
 
@@ -32,10 +32,10 @@ program
   .option("--uninstall", "Remove all components", false)
   .option("--no-confirm", "Skip interactions")
   .option("--no-overwrite", "Does not overwrite if exists")
-  .option("--no-style", "Exclude copy of __style.ts file");
+  .option("--no-style", "Exclude copy of _style.ts file");
 
 export async function main() {
-  p.intro("SvSeeds Collector");
+  p.intro("SvSeeds Kit");
 
   let exitCode = 0;
   let tmp = "";

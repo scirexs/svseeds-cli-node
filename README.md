@@ -50,7 +50,7 @@ npx svseeds --uninstall
 npx svseeds --no-overwrite [components...]
 ```
 
-- Copy without `__style.ts` file
+- Copy without `_style.ts` file
 ```
 npx svseeds --no-style [components...]
 ```
